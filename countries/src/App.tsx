@@ -1,16 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Box,
   Button,
-  UnorderedList,
-  ListItem,
-  Text,
   Heading, 
   Divider,  
   Menu,
@@ -31,6 +23,7 @@ function App() : React.ReactElement {
   const [gender, setGender] = useState("all" as string)
 
   useEffect(() => {
+    // API call for user data on mount of App component
     const url = "https://randomuser.me/api/?results=100"
 
     fetch(url)
@@ -38,7 +31,6 @@ function App() : React.ReactElement {
     .then(
       (result) => {
         setData(result);
-        console.log(result)
       },
       (error) => {
         throw error
@@ -46,7 +38,9 @@ function App() : React.ReactElement {
     )
   }, [])
 
+
   useEffect(() => {
+    //Once data loaded, parses data to get country and user variables
     if (data && data["results"]) {
       setCountries((prevState) => {
         let newCountries = {} as Countries
@@ -80,7 +74,7 @@ function App() : React.ReactElement {
         </Heading>
         <Menu colorScheme="gray" >
           <MenuButton as={Button} colorScheme="gray" rightIcon={<ChevronDownIcon />}>
-            Filter Gender
+            Gender
           </MenuButton>
           <MenuList>
             <MenuItemOption isChecked={gender === "male"} onClick={() => setGender("male")}>Male</MenuItemOption>
