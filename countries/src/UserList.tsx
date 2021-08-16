@@ -21,7 +21,7 @@ export const UserList: FunctionComponent<UserListProps> = ({users}) => {
                 .filter((user) => gender === "all" || gender === user["gender"])
                 .map((user) => (
                     <ListItem as={Text} fontSize="sm" key={user["name"]}>
-                        {`${user["name"]}, ${user["gender"]}, ${user["city"]}, ${user["state"]}, ${user["registered"].toDateString()}`}
+                        {`Name: ${user["name"]} | Gender: ${user["gender"]} | City: ${user["city"]} | State: ${user["state"]} | Date Registered: ${user["registered"].toDateString()}`}
                     </ListItem>
                 )
             )}
