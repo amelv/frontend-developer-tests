@@ -22,10 +22,10 @@ import {ChevronDownIcon} from "@chakra-ui/icons"
 import _ from "lodash"
 
 import {DataMap, Countries} from './types'
+import { CountryList } from "./CountryList"
+import {GenderContext} from './GenderContext'
 
 function App() : React.ReactElement {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [data, setData] = useState(null as DataMap | null)
   const [countries, setCountries] = useState(null as Countries | null)
   const [gender, setGender] = useState("all" as string)
@@ -37,13 +37,11 @@ function App() : React.ReactElement {
     .then(response => response.json())
     .then(
       (result) => {
-        setIsLoaded(true);
         setData(result);
         console.log(result)
       },
       (error) => {
-        setIsLoaded(true);
-        setError(error);
+        throw error
       }
     )
   }, [])
@@ -75,55 +73,29 @@ function App() : React.ReactElement {
   }, [data])
 
   return (
-    <Box bg="gray.700" h="100%" flex={1} align="center" justify="center" pt="40px" pb="40px" pl="10vw" pr="10vw">
-      <Heading color="gray.100">
-        Countries
-      </Heading>
-      <Menu colorScheme="gray" >
-        <MenuButton as={Button} colorScheme="gray" rightIcon={<ChevronDownIcon />}>
-          Filter Gender
-        </MenuButton>
-        <MenuList>
-          <MenuItemOption isChecked={gender === "male"} onClick={() => setGender("male")}>Male</MenuItemOption>
-          <MenuItemOption isChecked={gender === "female"} onClick={() => setGender("female")}>Female</MenuItemOption>
-          <MenuItemOption isChecked={gender === "all"} onClick={() => setGender("all")}>All</MenuItemOption>
-        </MenuList>
-      </Menu>
-      <Divider mt="40px" mb="40px" orientation="horizontal" />
-        {!countries ? (
-          <div>Sorry, no data is currently available</div>
-        ) : (
-          <Accordion bg="gray.400" color="black"  allowToggle>
-            {Object.keys(countries)
-              .sort((a, b) => countries[a].length - countries[b].length)
-              .map((val) => 
-                (
-                  <AccordionItem key={val}>
-                    <h2>
-                      <AccordionButton>
-                        <Box flex="1" textAlign="left">
-                          {val}
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel>
-                      <UnorderedList>
-                        {countries[val]
-                          .filter((user) => gender === "all" || gender === user["gender"])
-                          .map((user) => (
-                            <ListItem as={Text} fontSize="sm" key={user["name"]}>
-                            {`${user["name"]}, ${user["gender"]}, ${user["city"]}, ${user["state"]}, ${user["registered"].toDateString()}`}
-                            </ListItem>
-                        ))}
-                      </UnorderedList>
-                    </AccordionPanel>
-                  </AccordionItem>
-                )
-              )}
-          </Accordion>
-        )}
-    </Box>
+    <GenderContext.Provider value={{gender, setGender}}>
+      <Box bg="gray.700" h="100%" flex={1} align="center" justify="center" pt="40px" pb="40px" pl="10vw" pr="10vw">
+        <Heading color="gray.100">
+          Countries
+        </Heading>
+        <Menu colorScheme="gray" >
+          <MenuButton as={Button} colorScheme="gray" rightIcon={<ChevronDownIcon />}>
+            Filter Gender
+          </MenuButton>
+          <MenuList>
+            <MenuItemOption isChecked={gender === "male"} onClick={() => setGender("male")}>Male</MenuItemOption>
+            <MenuItemOption isChecked={gender === "female"} onClick={() => setGender("female")}>Female</MenuItemOption>
+            <MenuItemOption isChecked={gender === "all"} onClick={() => setGender("all")}>All</MenuItemOption>
+          </MenuList>
+        </Menu>
+        <Divider mt="40px" mb="40px" orientation="horizontal" />
+          {!countries ? (
+            <div>Sorry, no data is currently available</div>
+          ) : (
+            <CountryList countries={countries} gender={gender} />
+          )}
+      </Box>
+    </GenderContext.Provider>
   );
 }
 
