@@ -1,3 +1,6 @@
+/* Interfaces for various objects and variables */
+
+/* Typing for the user data sent from API call */
 export interface UserData {
     "cell" : string,
     "dob": {
@@ -55,6 +58,7 @@ export interface UserData {
     }
   }
   
+  /* Outermost types of data from API call */
   export interface DataMap {
     "info" : {
       "page" : number,
@@ -65,6 +69,7 @@ export interface UserData {
     "results" : Array<UserData>
   }
   
+  /* Type of each user for a certain conutry */
   export interface CountryUser {
     "name" : string,
     "gender": string,
@@ -73,6 +78,7 @@ export interface UserData {
     "registered": Date
   }
   
+  /* Type of object for all countries loaded in data */
   export interface Countries {
     [country : string] : Array<CountryUser>
   }

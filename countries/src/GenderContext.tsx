@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react"
 
+/* Context variable for getting and setting gender filter value */
 export type GenderContent = {
     gender : string,
     setGender : (g : string) => void

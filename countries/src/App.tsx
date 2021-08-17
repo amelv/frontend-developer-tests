@@ -17,6 +17,7 @@ import {DataMap, Countries} from './types'
 import { CountryList } from "./CountryList"
 import {GenderContext} from './GenderContext'
 
+//Chakra UI component library used for styling and basic UI functionality
 function App() : React.ReactElement {
   const [data, setData] = useState(null as DataMap | null)
   const [countries, setCountries] = useState(null as Countries | null)
@@ -53,10 +54,13 @@ function App() : React.ReactElement {
             "state": user["location"]["state"],
             "registered": new Date(user["registered"]["date"]),
           }
+
           if (!newCountries[country]) {
             newCountries[country] = []
             newCountries[country].push(newUser)
           } else {
+            /* This lodash library will use binary search to decide where the user 
+            should be inserted in the sorted list of users */
             let userIndex = _.sortedIndexBy( newCountries[country], newUser, (x) => x["registered"])
             newCountries[country][userIndex] = newUser
           }
@@ -64,7 +68,7 @@ function App() : React.ReactElement {
         return newCountries
       })
     }
-  }, [data])
+  }, [data]) //This hook is triggered when data variable changes
 
   return (
     <GenderContext.Provider value={{gender, setGender}}>
@@ -86,7 +90,7 @@ function App() : React.ReactElement {
           {!countries ? (
             <div>Sorry, no data is currently available</div>
           ) : (
-            <CountryList countries={countries} gender={gender} />
+            <CountryList countries={countries} />
           )}
       </Box>
     </GenderContext.Provider>

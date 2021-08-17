@@ -14,7 +14,7 @@ type UserListProps = {
 }
 
 export const UserList: FunctionComponent<UserListProps> = ({users}) => {
-    const {gender} = useGenderContext()
+    const {gender} = useGenderContext() // gets context value of gender
     return (
         <UnorderedList>
             {users
